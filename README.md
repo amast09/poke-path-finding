@@ -1,13 +1,10 @@
-# Weather App
+# Pokemon Path Finder
 
-This application allows a user to display weather information for a specific
-location using their browser.
-
-Code is auto deployed to [here](http://3.91.206.129/) (browser geo location will not work until I get a proper domain + https setup)
+An app to help Pokemon find their way home.
 
 ## Getting Started
 
-1 - Install node 14.12.0 (instructions that follow use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
+1 - Install node 15.0.1 (instructions that follow use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
 
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
@@ -27,15 +24,6 @@ nvm use
 npm install
 ```
 
-3 - Fill in required environment variables
-
-```
-cp .env.example .env
-```
-
-Replace `replace-me-with-valid-api-key` inside of `.env.local` with a valid
-[Open Weather API Key](https://openweathermap.org/appid)
-
 ## To develop locally against the app
 
 ```
@@ -50,15 +38,10 @@ Open http://localhost:3000 in your browser
 npm test
 ```
 
-## Run Production Locally
+## Build the App for Production
 
 ```
-docker build -t weather-app-image .
-docker run -d -p 80:80 \
-  --name weather-app-container \
-  --env API_PORT=80 \
-  --env OPEN_WEATHER_API_KEY=<your-weather-key> \
-  weather-app-image
+npm run build
 ```
 
-open http://localhost in your browser
+Assets produced assume the app is being hosted at `/`
