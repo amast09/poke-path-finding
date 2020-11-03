@@ -1,14 +1,15 @@
 import MapCoordinate from "./MapCoordinate";
 
 export enum MapState {
-  "NotSized" = "NotSized",
-  "Sized" = "Sized",
-  "ImpassiblesMarked" = "ImpassiblesMarked",
-  "ImpassiblesAndStartMarked" = "ImpassiblesAndStartMarked",
-  "Built" = "Built",
-  "WithPathHome" = "WithPathHome",
-  "WithNoPathHome" = "WithNoPathHome",
+  NotSized = "NotSized",
+  Sized = "Sized",
+  ImpassiblesMarked = "ImpassiblesMarked",
+  ImpassiblesAndStartMarked = "ImpassiblesAndStartMarked",
+  Built = "Built",
+  BuiltAndCalculated = "BuiltAndCalculated",
 }
+
+export type NoPathHome = "NoPathHome";
 
 export interface UnsizedMap {
   readonly currentState: MapState.NotSized;
@@ -40,21 +41,13 @@ interface MapBuilt {
   readonly end: MapCoordinate;
 }
 
-interface MapWithNoPathHome {
-  readonly currentState: MapState.WithNoPathHome;
+interface MapBuiltAndCalculated {
+  readonly currentState: MapState.BuiltAndCalculated;
   readonly size: number;
   readonly impassibles: MapCoordinate[];
   readonly start: MapCoordinate;
   readonly end: MapCoordinate;
-}
-
-interface MapWithPathHome {
-  readonly currentState: MapState.WithPathHome;
-  readonly size: number;
-  readonly impassibles: MapCoordinate[];
-  readonly start: MapCoordinate;
-  readonly end: MapCoordinate;
-  readonly pathHome: MapCoordinate[];
+  readonly pathHome: MapCoordinate[] | NoPathHome;
 }
 
 type PokemonMapState =
@@ -63,7 +56,6 @@ type PokemonMapState =
   | MapWithImpassibles
   | MapWithStartAndImpassibles
   | MapBuilt
-  | MapWithNoPathHome
-  | MapWithPathHome;
+  | MapBuiltAndCalculated;
 
 export default PokemonMapState;
