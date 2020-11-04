@@ -1,5 +1,5 @@
 import React, { Reducer, useReducer } from "react";
-import PokemonMapState, { MapState, UnsizedMap } from "./PokemonMapState";
+import PokemonMapState, { MapState, MapNotSized } from "./PokemonMapState";
 import pokemonMapReducer from "./pokemonMapReducer";
 import PokemonMapAction, {
   ActionType,
@@ -8,7 +8,7 @@ import PokemonMapAction, {
 import PokemonMapSquare from "./PokemonMapSquare";
 import MapSizeSelection from "./MapSizeSelection";
 
-const initialState: UnsizedMap = {
+const initialState: MapNotSized = {
   currentState: MapState.NotSized,
 };
 
@@ -30,10 +30,10 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
     case MapState.NotSized:
       return <MapSizeSelection onSizeSet={onSizeSelect} />;
     case MapState.Sized:
-    case MapState.ImpassiblesMarked:
-    case MapState.ImpassiblesAndStartMarked:
-    case MapState.Built:
-    case MapState.BuiltAndCalculated:
+    case MapState.ImpassablesMarked:
+    case MapState.ImpassablesAndStartMarked:
+    case MapState.Complete:
+    case MapState.WithPathHome:
       return (
         <div
           style={{
@@ -43,7 +43,7 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
             height: "100%",
           }}
         >
-          {Array.from({ length: state.size * 3 }, () => (
+          {Array.from({ length: state.size * state.size }, () => (
             <PokemonMapSquare />
           ))}
         </div>

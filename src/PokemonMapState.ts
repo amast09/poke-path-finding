@@ -3,59 +3,59 @@ import MapCoordinate from "./MapCoordinate";
 export enum MapState {
   NotSized = "NotSized",
   Sized = "Sized",
-  ImpassiblesMarked = "ImpassiblesMarked",
-  ImpassiblesAndStartMarked = "ImpassiblesAndStartMarked",
-  Built = "Built",
-  BuiltAndCalculated = "BuiltAndCalculated",
+  ImpassablesMarked = "ImpassablesMarked",
+  ImpassablesAndStartMarked = "ImpassablesAndStartMarked",
+  Complete = "Complete",
+  WithPathHome = "WithPathHome",
 }
 
 export type NoPathHome = "NoPathHome";
 
-export interface UnsizedMap {
+export interface MapNotSized {
   readonly currentState: MapState.NotSized;
 }
 
-interface SizedMap {
+export interface MapSized {
   readonly currentState: MapState.Sized;
   readonly size: number;
 }
 
-interface MapWithImpassibles {
-  readonly currentState: MapState.ImpassiblesMarked;
+export interface MapWithImpassables {
+  readonly currentState: MapState.ImpassablesMarked;
   readonly size: number;
-  readonly impassibles: MapCoordinate[];
+  readonly impassables: MapCoordinate[];
 }
 
-interface MapWithStartAndImpassibles {
-  readonly currentState: MapState.ImpassiblesAndStartMarked;
+export interface MapWithStartAndImpassables {
+  readonly currentState: MapState.ImpassablesAndStartMarked;
   readonly size: number;
-  readonly impassibles: MapCoordinate[];
+  readonly impassables: MapCoordinate[];
   readonly start: MapCoordinate;
 }
 
-interface MapBuilt {
-  readonly currentState: MapState.Built;
+export interface MapComplete {
+  readonly currentState: MapState.Complete;
   readonly size: number;
-  readonly impassibles: MapCoordinate[];
+  readonly impassables: MapCoordinate[];
   readonly start: MapCoordinate;
   readonly end: MapCoordinate;
 }
 
-interface MapBuiltAndCalculated {
-  readonly currentState: MapState.BuiltAndCalculated;
+export interface MapWithPathHome {
+  readonly currentState: MapState.WithPathHome;
   readonly size: number;
-  readonly impassibles: MapCoordinate[];
+  readonly impassables: MapCoordinate[];
   readonly start: MapCoordinate;
   readonly end: MapCoordinate;
   readonly pathHome: MapCoordinate[] | NoPathHome;
 }
 
 type PokemonMapState =
-  | UnsizedMap
-  | SizedMap
-  | MapWithImpassibles
-  | MapWithStartAndImpassibles
-  | MapBuilt
-  | MapBuiltAndCalculated;
+  | MapNotSized
+  | MapSized
+  | MapWithImpassables
+  | MapWithStartAndImpassables
+  | MapComplete
+  | MapWithPathHome;
 
 export default PokemonMapState;

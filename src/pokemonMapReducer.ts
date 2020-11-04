@@ -1,12 +1,6 @@
-import PokemonMapState from "./PokemonMapState";
+import PokemonMapState, { MapState } from "./PokemonMapState";
 import PokemonMapAction, { ActionType } from "./PokemonMapAction";
 import { Reducer } from "react";
-
-// TODO: TDD in
-// return {
-//   currentState: MapState.Sized,
-//   size: action.size,
-// };
 
 const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
   state: PokemonMapState,
@@ -14,7 +8,19 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
 ): PokemonMapState => {
   switch (action.type) {
     case ActionType.MapSizeSet:
-    case ActionType.ImpassiblePicked:
+      if (
+        state.currentState === MapState.NotSized &&
+        action.size >= 2 &&
+        action.size <= 10
+      ) {
+        return {
+          currentState: MapState.Sized,
+          size: action.size,
+        };
+      } else {
+        return state;
+      }
+    case ActionType.ImpassablePicked:
     case ActionType.EndCoordinatePicked:
     case ActionType.StartCoordinatePicked:
     case ActionType.PathHomeCalculated:
