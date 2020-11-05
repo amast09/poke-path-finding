@@ -3,18 +3,29 @@ import PokemonMapAction, { ActionType } from "./PokemonMapAction";
 import { Reducer } from "react";
 
 const isSquareInMap = (mapSize: number, squareIdx: number): boolean =>
-  squareIdx >= 0 && squareIdx < mapSize;
+  squareIdx >= 0 && squareIdx < mapSize * mapSize;
+
+const hasSquaresAvailable = (
+  mapSize: number,
+  currentImpassables: Set<number>
+): boolean => mapSize * mapSize - currentImpassables.size > 2;
+
+const immutablyRemoveValueFromSet = (
+  set: Set<number>,
+  value: number
+): Set<number> =>
+  new Set<number>(
+    Array.from(set.values()).filter((setValue) => setValue !== value)
+  );
+
+const immutablyAddValueToSet = (set: Set<number>, value: number): Set<number> =>
+  new Set<number>([...Array.from(set.values()), value]);
 
 // Immutable Set XOR
-const xorValueIntoSet = (set: Set<number>, value: number): Set<number> => {
-  if (set.has(value)) {
-    return new Set<number>(
-      Array.from(set.values()).filter((setValue) => setValue !== value)
-    );
-  } else {
-    return new Set<number>([...Array.from(set.values()), value]);
-  }
-};
+const xorValueIntoSet = (set: Set<number>, value: number): Set<number> =>
+  set.has(value)
+    ? immutablyRemoveValueFromSet(set, value)
+    : immutablyAddValueToSet(set, value);
 
 const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
   state: PokemonMapState,
@@ -51,7 +62,9 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
         return {
           ...state,
           currentState: MapState.ImpassablesMarked,
-          impassables: xorValueIntoSet(state.impassables, action.squareIdx),
+          impassables: hasSquaresAvailable(state.size, state.impassables)
+            ? xorValueIntoSet(state.impassables, action.squareIdx)
+            : immutablyRemoveValueFromSet(state.impassables, action.squareIdx),
         };
       } else {
         return state;

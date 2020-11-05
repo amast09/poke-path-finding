@@ -3,6 +3,7 @@ import PokemonMapState, { MapNotSized, MapState } from "./PokemonMapState";
 import pokemonMapReducer from "./pokemonMapReducer";
 import PokemonMapAction, {
   ActionType,
+  ImpassableToggledAction,
   MapSizeSetAction,
 } from "./PokemonMapAction";
 import MapSquare from "./MapSquare";
@@ -27,11 +28,38 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
     dispatch(mapSizeSetAction);
   };
 
+  const onImpassibleToggled = (squareIdx: number) => (): void => {
+    const impassableToggledAction: ImpassableToggledAction = {
+      type: ActionType.ImpassableToggled,
+      squareIdx,
+    };
+
+    dispatch(impassableToggledAction);
+  };
+
   switch (state.currentState) {
     case MapState.NotSized:
       return <MapSizeSelection onSizeSet={onSizeSelect} />;
     case MapState.Sized:
     case MapState.ImpassablesMarked:
+      return (
+        <div
+          style={{
+            display: "grid",
+            gridTemplate: `repeat(${state.size}, auto) / repeat(${state.size}, auto)`,
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          {Array.from({ length: state.size * state.size }, (_, idx) => (
+            <MapSquare
+              key={idx}
+              onClick={onImpassibleToggled(idx)}
+              mapSquareState={getMapSquareState(state, idx)}
+            />
+          ))}
+        </div>
+      );
     case MapState.ImpassablesAndStartMarked:
     case MapState.Complete:
     case MapState.WithPathHome:

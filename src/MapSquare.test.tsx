@@ -52,7 +52,7 @@ describe("<MapSquare />", () => {
     expect(screen.getByAltText(state)).toHaveAttribute("src", expectedSrc);
   });
 
-  it("fires the onClick when it has a state 'Open'", () => {
+  it("fires the onClick when it clicked", () => {
     render(
       <MapSquare onClick={onClickMock} mapSquareState={MapSquareState.Open} />
     );
@@ -60,51 +60,5 @@ describe("<MapSquare />", () => {
     fireEvent.click(screen.getByTestId(MAP_SQUARE_TEST_ID));
 
     expect(onClickMock).toHaveBeenCalledTimes(1);
-  });
-
-  it("does not fire the onClick when it has a state 'Start'", () => {
-    render(
-      <MapSquare onClick={onClickMock} mapSquareState={MapSquareState.Start} />
-    );
-
-    fireEvent.click(screen.getByTestId(MAP_SQUARE_TEST_ID));
-
-    expect(onClickMock).not.toHaveBeenCalled();
-  });
-
-  it("does not fire the onClick when it has a state 'End'", () => {
-    render(
-      <MapSquare onClick={onClickMock} mapSquareState={MapSquareState.End} />
-    );
-
-    fireEvent.click(screen.getByTestId(MAP_SQUARE_TEST_ID));
-
-    expect(onClickMock).not.toHaveBeenCalled();
-  });
-
-  it("does not fire the onClick when it has a state 'Impassible'", () => {
-    render(
-      <MapSquare
-        onClick={onClickMock}
-        mapSquareState={MapSquareState.Impassible}
-      />
-    );
-
-    fireEvent.click(screen.getByTestId(MAP_SQUARE_TEST_ID));
-
-    expect(onClickMock).not.toHaveBeenCalled();
-  });
-
-  it("does not fire the onClick when it has a state 'OnPathHome'", () => {
-    render(
-      <MapSquare
-        onClick={onClickMock}
-        mapSquareState={MapSquareState.OnPathHome}
-      />
-    );
-
-    fireEvent.click(screen.getByTestId(MAP_SQUARE_TEST_ID));
-
-    expect(onClickMock).not.toHaveBeenCalled();
   });
 });

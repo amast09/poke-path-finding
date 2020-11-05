@@ -28,13 +28,13 @@ const MAP_SQUARE_IMAGES: Readonly<Record<MapSquareState, JSX.Element>> = {
 };
 
 const MapSquare: React.FC<{
-  onClick: () => void;
+  onClick?: () => void;
   mapSquareState: MapSquareState;
 }> = ({ onClick, mapSquareState }) => (
   <div
     data-testid="map-square"
     className={`map-square map-square--${mapSquareState}`}
-    onClick={mapSquareState === MapSquareState.Open ? onClick : undefined}
+    onClick={onClick}
   >
     {MAP_SQUARE_IMAGES[mapSquareState]}
   </div>
