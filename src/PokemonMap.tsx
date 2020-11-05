@@ -5,8 +5,9 @@ import PokemonMapAction, {
   ActionType,
   MapSizeSetAction,
 } from "./PokemonMapAction";
-import MapSquare, { MapSquareState } from "./MapSquare";
+import MapSquare from "./MapSquare";
 import MapSizeSelection from "./MapSizeSelection";
+import getMapSquareState from "./getMapSquareState";
 
 const initialState: MapNotSized = {
   currentState: MapState.NotSized,
@@ -43,10 +44,11 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
             height: "100%",
           }}
         >
-          {Array.from({ length: state.size * state.size }, () => (
+          {Array.from({ length: state.size * state.size }, (_, idx) => (
             <MapSquare
+              key={idx}
               onClick={() => {}}
-              mapSquareState={MapSquareState.Open}
+              mapSquareState={getMapSquareState(state, idx)}
             />
           ))}
         </div>

@@ -52,7 +52,7 @@ describe("getMapSquareState", () => {
     it("returns 'Open' for all squares", () => {
       expect(
         ALL_MAP_INDEXES.every(
-          (idx) => getMapSquareState(mapNotSized)(idx) === MapSquareState.Open
+          (idx) => getMapSquareState(mapNotSized, idx) === MapSquareState.Open
         )
       ).toEqual(true);
     });
@@ -62,7 +62,7 @@ describe("getMapSquareState", () => {
     it("returns 'Open' for all squares", () => {
       expect(
         ALL_MAP_INDEXES.every(
-          (idx) => getMapSquareState(mapSized)(idx) === MapSquareState.Open
+          (idx) => getMapSquareState(mapSized, idx) === MapSquareState.Open
         )
       ).toEqual(true);
     });
@@ -78,7 +78,7 @@ describe("getMapSquareState", () => {
       expect(
         opens.every(
           (idx) =>
-            getMapSquareState(mapWithImpassables)(idx) === MapSquareState.Open
+            getMapSquareState(mapWithImpassables, idx) === MapSquareState.Open
         )
       ).toEqual(true);
     });
@@ -87,7 +87,7 @@ describe("getMapSquareState", () => {
       expect(
         impassables.every(
           (idx) =>
-            getMapSquareState(mapWithImpassables)(idx) ===
+            getMapSquareState(mapWithImpassables, idx) ===
             MapSquareState.Impassible
         )
       ).toEqual(true);
@@ -108,7 +108,7 @@ describe("getMapSquareState", () => {
       expect(
         opens.every(
           (idx) =>
-            getMapSquareState(mapWithStartAndImpassables)(idx) ===
+            getMapSquareState(mapWithStartAndImpassables, idx) ===
             MapSquareState.Open
         )
       ).toEqual(true);
@@ -118,7 +118,7 @@ describe("getMapSquareState", () => {
       expect(
         impassables.every(
           (idx) =>
-            getMapSquareState(mapWithStartAndImpassables)(idx) ===
+            getMapSquareState(mapWithStartAndImpassables, idx) ===
             MapSquareState.Impassible
         )
       ).toEqual(true);
@@ -126,7 +126,8 @@ describe("getMapSquareState", () => {
 
     it("returns 'Start' for the start square", () => {
       expect(
-        getMapSquareState(mapWithStartAndImpassables)(
+        getMapSquareState(
+          mapWithStartAndImpassables,
           mapWithStartAndImpassables.start
         )
       ).toEqual(MapSquareState.Start);
@@ -145,7 +146,7 @@ describe("getMapSquareState", () => {
     it("returns 'Open' for all open squares", () => {
       expect(
         opens.every(
-          (idx) => getMapSquareState(mapComplete)(idx) === MapSquareState.Open
+          (idx) => getMapSquareState(mapComplete, idx) === MapSquareState.Open
         )
       ).toEqual(true);
     });
@@ -154,19 +155,19 @@ describe("getMapSquareState", () => {
       expect(
         impassables.every(
           (idx) =>
-            getMapSquareState(mapComplete)(idx) === MapSquareState.Impassible
+            getMapSquareState(mapComplete, idx) === MapSquareState.Impassible
         )
       ).toEqual(true);
     });
 
     it("returns 'Start' for the start square", () => {
-      expect(getMapSquareState(mapComplete)(mapComplete.start)).toEqual(
+      expect(getMapSquareState(mapComplete, mapComplete.start)).toEqual(
         MapSquareState.Start
       );
     });
 
     it("returns 'End' for the end square", () => {
-      expect(getMapSquareState(mapComplete)(mapComplete.end)).toEqual(
+      expect(getMapSquareState(mapComplete, mapComplete.end)).toEqual(
         MapSquareState.End
       );
     });
@@ -186,7 +187,7 @@ describe("getMapSquareState", () => {
       expect(
         opens.every(
           (idx) =>
-            getMapSquareState(mapWithPathHome)(idx) === MapSquareState.Open
+            getMapSquareState(mapWithPathHome, idx) === MapSquareState.Open
         )
       ).toEqual(true);
     });
@@ -195,20 +196,20 @@ describe("getMapSquareState", () => {
       expect(
         impassables.every(
           (idx) =>
-            getMapSquareState(mapWithPathHome)(idx) ===
+            getMapSquareState(mapWithPathHome, idx) ===
             MapSquareState.Impassible
         )
       ).toEqual(true);
     });
 
     it("returns 'Start' for the start square", () => {
-      expect(getMapSquareState(mapWithPathHome)(mapWithPathHome.start)).toEqual(
+      expect(getMapSquareState(mapWithPathHome, mapWithPathHome.start)).toEqual(
         MapSquareState.Start
       );
     });
 
     it("returns 'End' for the start square", () => {
-      expect(getMapSquareState(mapWithPathHome)(mapWithPathHome.end)).toEqual(
+      expect(getMapSquareState(mapWithPathHome, mapWithPathHome.end)).toEqual(
         MapSquareState.End
       );
     });
@@ -217,7 +218,7 @@ describe("getMapSquareState", () => {
       expect(
         PATH_HOME.every(
           (idx) =>
-            getMapSquareState(mapWithPathHome)(idx) ===
+            getMapSquareState(mapWithPathHome, idx) ===
             MapSquareState.OnPathHome
         )
       ).toEqual(true);
