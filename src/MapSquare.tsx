@@ -3,6 +3,7 @@ import grassTilePath from "./images/grasstile.png";
 import rockTilePath from "./images/rocktile.png";
 import bulbasaurPath from "./images/bulbasaur.png";
 import finishTilePath from "./images/finishtile.png";
+import "./MapSquareStyles.css";
 
 export enum MapSquareState {
   Open = "Open",
