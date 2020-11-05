@@ -2,7 +2,7 @@ import { NoPathHome } from "./PokemonMapState";
 
 export enum ActionType {
   MapSizeSet = "MapSizeSet",
-  ImpassablePicked = "impassablePicked",
+  ImpassableToggled = "ImpassableToggled",
   StartCoordinatePicked = "StartCoordinatePicked",
   EndCoordinatePicked = "EndCoordinatePicked",
   PathHomeCalculated = "PathHomeCalculated",
@@ -13,8 +13,8 @@ export interface MapSizeSetAction {
   readonly size: number;
 }
 
-interface ImpassablePicked {
-  readonly type: ActionType.ImpassablePicked;
+export interface ImpassableToggledAction {
+  readonly type: ActionType.ImpassableToggled;
   readonly squareIdx: number;
 }
 
@@ -35,7 +35,7 @@ interface PathHomeCalculated {
 
 type PokemonMapAction =
   | MapSizeSetAction
-  | ImpassablePicked
+  | ImpassableToggledAction
   | StartCoordinatePicked
   | EndCoordinatePicked
   | PathHomeCalculated;

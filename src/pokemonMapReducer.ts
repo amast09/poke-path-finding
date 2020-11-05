@@ -2,6 +2,20 @@ import PokemonMapState, { MapState } from "./PokemonMapState";
 import PokemonMapAction, { ActionType } from "./PokemonMapAction";
 import { Reducer } from "react";
 
+const isSquareInMap = (mapSize: number, squareIdx: number): boolean =>
+  squareIdx >= 0 && squareIdx < mapSize;
+
+// Immutable Set XOR
+const xorValueIntoSet = (set: Set<number>, value: number): Set<number> => {
+  if (set.has(value)) {
+    return new Set<number>(
+      Array.from(set.values()).filter((setValue) => setValue !== value)
+    );
+  } else {
+    return new Set<number>([...Array.from(set.values()), value]);
+  }
+};
+
 const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
   state: PokemonMapState,
   action: PokemonMapAction
@@ -20,7 +34,28 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
       } else {
         return state;
       }
-    case ActionType.ImpassablePicked:
+    case ActionType.ImpassableToggled:
+      if (
+        state.currentState === MapState.Sized &&
+        isSquareInMap(state.size, action.squareIdx)
+      ) {
+        return {
+          ...state,
+          currentState: MapState.ImpassablesMarked,
+          impassables: new Set([action.squareIdx]),
+        };
+      } else if (
+        state.currentState === MapState.ImpassablesMarked &&
+        isSquareInMap(state.size, action.squareIdx)
+      ) {
+        return {
+          ...state,
+          currentState: MapState.ImpassablesMarked,
+          impassables: xorValueIntoSet(state.impassables, action.squareIdx),
+        };
+      } else {
+        return state;
+      }
     case ActionType.EndCoordinatePicked:
     case ActionType.StartCoordinatePicked:
     case ActionType.PathHomeCalculated:

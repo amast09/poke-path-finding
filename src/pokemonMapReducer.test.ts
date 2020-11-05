@@ -1,12 +1,16 @@
-import { ActionType, MapSizeSetAction } from "./PokemonMapAction";
 import {
+  ActionType,
+  ImpassableToggledAction,
+  MapSizeSetAction,
+} from "./PokemonMapAction";
+import {
+  MapComplete,
+  MapNotSized,
+  MapSized,
   MapState,
   MapWithImpassables,
-  MapWithStartAndImpassables,
-  MapSized,
-  MapNotSized,
-  MapComplete,
   MapWithPathHome,
+  MapWithStartAndImpassables,
 } from "./PokemonMapState";
 import pokemonMapReducer from "./pokemonMapReducer";
 
@@ -95,6 +99,80 @@ describe("pokemonMapReducer", () => {
       expect(pokemonMapReducer(mapWithImpassables, action)).toEqual(
         mapWithImpassables
       );
+    });
+
+    it("noops when the map is 'ImpassablesAndStartMarked'", () => {
+      expect(pokemonMapReducer(mapWithStartAndImpassables, action)).toEqual(
+        mapWithStartAndImpassables
+      );
+    });
+
+    it("noops when the map is 'Complete'", () => {
+      expect(pokemonMapReducer(mapComplete, action)).toEqual(mapComplete);
+    });
+
+    it("noops when the map is 'WithPathHome'", () => {
+      expect(pokemonMapReducer(mapWithPathHome, action)).toEqual(
+        mapWithPathHome
+      );
+    });
+  });
+
+  describe("MapSizeSet Action", () => {
+    const action: ImpassableToggledAction = {
+      type: ActionType.ImpassableToggled,
+      squareIdx: 2,
+    };
+
+    it("noops when the map is 'NotSized'", () => {
+      expect(pokemonMapReducer(mapNotSized, action)).toEqual(mapNotSized);
+    });
+
+    describe("when the map is 'Sized'", () => {
+      it("noops when the squareIdx is not on the map", () => {
+        const actionWithIdxNotOnMap: ImpassableToggledAction = {
+          type: ActionType.ImpassableToggled,
+          squareIdx: mapSized.size,
+        };
+
+        expect(pokemonMapReducer(mapSized, actionWithIdxNotOnMap)).toEqual(
+          mapSized
+        );
+      });
+
+      it("adds the square as an impassible when the squareIdx is on the map", () => {
+        const currentState: MapWithImpassables = {
+          ...mapSized,
+          currentState: MapState.ImpassablesMarked,
+          impassables: new Set([3]),
+        };
+        const expectedNextState: MapWithImpassables = {
+          ...mapSized,
+          currentState: MapState.ImpassablesMarked,
+          impassables: new Set([3, action.squareIdx]),
+        };
+
+        expect(pokemonMapReducer(currentState, action)).toEqual(
+          expectedNextState
+        );
+      });
+
+      it("removes the square as an impassible when the squareIdx is already an impassible", () => {
+        const currentState: MapWithImpassables = {
+          ...mapSized,
+          currentState: MapState.ImpassablesMarked,
+          impassables: new Set([action.squareIdx]),
+        };
+        const expectedNextState: MapWithImpassables = {
+          ...mapSized,
+          currentState: MapState.ImpassablesMarked,
+          impassables: new Set(),
+        };
+
+        expect(pokemonMapReducer(currentState, action)).toEqual(
+          expectedNextState
+        );
+      });
     });
 
     it("noops when the map is 'ImpassablesAndStartMarked'", () => {
