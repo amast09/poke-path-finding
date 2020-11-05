@@ -1,11 +1,11 @@
 import React, { Reducer, useReducer } from "react";
-import PokemonMapState, { MapState, MapNotSized } from "./PokemonMapState";
+import PokemonMapState, { MapNotSized, MapState } from "./PokemonMapState";
 import pokemonMapReducer from "./pokemonMapReducer";
 import PokemonMapAction, {
   ActionType,
   MapSizeSetAction,
 } from "./PokemonMapAction";
-import PokemonMapSquare from "./PokemonMapSquare";
+import MapSquare, { MapSquareState } from "./MapSquare";
 import MapSizeSelection from "./MapSizeSelection";
 
 const initialState: MapNotSized = {
@@ -44,7 +44,10 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
           }}
         >
           {Array.from({ length: state.size * state.size }, () => (
-            <PokemonMapSquare />
+            <MapSquare
+              onClick={() => {}}
+              mapSquareState={MapSquareState.Open}
+            />
           ))}
         </div>
       );
