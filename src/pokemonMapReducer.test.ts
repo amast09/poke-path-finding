@@ -22,31 +22,25 @@ const mapSized: MapSized = {
 const mapWithImpassables: MapWithImpassables = {
   ...mapSized,
   currentState: MapState.ImpassablesMarked,
-  impassables: [{ x: 1, y: 1 }],
+  impassables: new Set([1, 2]),
 };
 
 const mapWithStartAndImpassables: MapWithStartAndImpassables = {
   ...mapWithImpassables,
   currentState: MapState.ImpassablesAndStartMarked,
-  start: { x: 0, y: 0 },
+  start: 1,
 };
 
 const mapComplete: MapComplete = {
   ...mapWithStartAndImpassables,
   currentState: MapState.Complete,
-  end: { x: 3, y: 3 },
+  end: 15,
 };
 
 const mapWithPathHome: MapWithPathHome = {
   ...mapComplete,
   currentState: MapState.WithPathHome,
-  pathHome: [
-    { x: 0, y: 1 },
-    { x: 0, y: 2 },
-    { x: 0, y: 3 },
-    { x: 1, y: 3 },
-    { x: 2, y: 3 },
-  ],
+  pathHome: [4, 8, 12, 13, 14],
 };
 
 describe("pokemonMapReducer", () => {

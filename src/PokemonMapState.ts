@@ -1,5 +1,3 @@
-import MapCoordinate from "./MapCoordinate";
-
 export enum MapState {
   NotSized = "NotSized",
   Sized = "Sized",
@@ -10,6 +8,8 @@ export enum MapState {
 }
 
 export type NoPathHome = "NoPathHome";
+
+export const NO_PATH_HOME: NoPathHome = "NoPathHome";
 
 export interface MapNotSized {
   readonly currentState: MapState.NotSized;
@@ -23,31 +23,31 @@ export interface MapSized {
 export interface MapWithImpassables {
   readonly currentState: MapState.ImpassablesMarked;
   readonly size: number;
-  readonly impassables: MapCoordinate[];
+  readonly impassables: Set<number>;
 }
 
 export interface MapWithStartAndImpassables {
   readonly currentState: MapState.ImpassablesAndStartMarked;
   readonly size: number;
-  readonly impassables: MapCoordinate[];
-  readonly start: MapCoordinate;
+  readonly impassables: Set<number>;
+  readonly start: number;
 }
 
 export interface MapComplete {
   readonly currentState: MapState.Complete;
   readonly size: number;
-  readonly impassables: MapCoordinate[];
-  readonly start: MapCoordinate;
-  readonly end: MapCoordinate;
+  readonly impassables: Set<number>;
+  readonly start: number;
+  readonly end: number;
 }
 
 export interface MapWithPathHome {
   readonly currentState: MapState.WithPathHome;
   readonly size: number;
-  readonly impassables: MapCoordinate[];
-  readonly start: MapCoordinate;
-  readonly end: MapCoordinate;
-  readonly pathHome: MapCoordinate[] | NoPathHome;
+  readonly impassables: Set<number>;
+  readonly start: number;
+  readonly end: number;
+  readonly pathHome: number[] | NoPathHome;
 }
 
 type PokemonMapState =

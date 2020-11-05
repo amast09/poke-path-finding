@@ -1,5 +1,3 @@
-import MapCoordinate from "./MapCoordinate";
-import Move from "./Move";
 import { NoPathHome } from "./PokemonMapState";
 
 export enum ActionType {
@@ -17,22 +15,22 @@ export interface MapSizeSetAction {
 
 interface ImpassablePicked {
   readonly type: ActionType.ImpassablePicked;
-  readonly coordinate: MapCoordinate;
+  readonly squareIdx: number;
 }
 
 interface StartCoordinatePicked {
   readonly type: ActionType.StartCoordinatePicked;
-  readonly coordinate: MapCoordinate;
+  readonly squareIdx: number;
 }
 
 interface EndCoordinatePicked {
   readonly type: ActionType.EndCoordinatePicked;
-  readonly coordinate: MapCoordinate;
+  readonly squareIdx: number;
 }
 
 interface PathHomeCalculated {
   readonly type: ActionType.PathHomeCalculated;
-  readonly path: Move[] | NoPathHome;
+  readonly path: number[] | NoPathHome;
 }
 
 type PokemonMapAction =
