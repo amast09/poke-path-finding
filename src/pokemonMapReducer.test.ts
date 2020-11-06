@@ -6,7 +6,6 @@ import {
 import {
   MapComplete,
   MapNotSized,
-  MapSized,
   MapState,
   MapWithImpassables,
   MapWithPathHome,
@@ -18,14 +17,9 @@ const mapNotSized: MapNotSized = {
   currentState: MapState.NotSized,
 };
 
-const mapSized: MapSized = {
-  currentState: MapState.Sized,
-  size: 4,
-};
-
 const mapWithImpassables: MapWithImpassables = {
-  ...mapSized,
-  currentState: MapState.ImpassablesMarked,
+  size: 4,
+  currentState: MapState.WithImpassables,
   impassables: new Set([1, 2]),
 };
 
@@ -75,13 +69,14 @@ describe("pokemonMapReducer", () => {
         );
       });
 
-      it("updates the map to be a sized map with a size between 3-10", () => {
+      it("updates the map to be a sized map with no impassibles with a size between 3-10", () => {
         const size5Action: MapSizeSetAction = {
           type: ActionType.MapSizeSet,
           size: 5,
         };
-        const expectedState: MapSized = {
-          currentState: MapState.Sized,
+        const expectedState: MapWithImpassables = {
+          currentState: MapState.WithImpassables,
+          impassables: new Set<number>(),
           size: size5Action.size,
         };
 
@@ -89,10 +84,6 @@ describe("pokemonMapReducer", () => {
           expectedState
         );
       });
-    });
-
-    it("noops when the map is 'Sized'", () => {
-      expect(pokemonMapReducer(mapSized, action)).toEqual(mapSized);
     });
 
     it("noops when the map is 'ImpassablesMarked'", () => {
@@ -118,7 +109,7 @@ describe("pokemonMapReducer", () => {
     });
   });
 
-  describe("MapSizeSet Action", () => {
+  describe("ImpassableToggled Action", () => {
     const action: ImpassableToggledAction = {
       type: ActionType.ImpassableToggled,
       squareIdx: 15,
@@ -128,22 +119,22 @@ describe("pokemonMapReducer", () => {
       expect(pokemonMapReducer(mapNotSized, action)).toEqual(mapNotSized);
     });
 
-    describe("when the map is 'Sized'", () => {
+    describe("when the map is 'WithImpassables'", () => {
       it("noops when the squareIdx is not on the map", () => {
         const actionWithIdxNotOnMap: ImpassableToggledAction = {
           type: ActionType.ImpassableToggled,
-          squareIdx: mapSized.size * mapSized.size,
+          squareIdx: mapWithImpassables.size * mapWithImpassables.size,
         };
 
-        expect(pokemonMapReducer(mapSized, actionWithIdxNotOnMap)).toEqual(
-          mapSized
-        );
+        expect(
+          pokemonMapReducer(mapWithImpassables, actionWithIdxNotOnMap)
+        ).toEqual(mapWithImpassables);
       });
 
       it("noops when there are only 2 open squares (1 for start and 1 for end)", () => {
         const currentState: MapWithImpassables = {
           size: 2,
-          currentState: MapState.ImpassablesMarked,
+          currentState: MapState.WithImpassables,
           impassables: new Set([0, 1]),
         };
         const action: ImpassableToggledAction = {
@@ -156,13 +147,13 @@ describe("pokemonMapReducer", () => {
 
       it("adds the square as an impassible when the squareIdx is on the map", () => {
         const currentState: MapWithImpassables = {
-          ...mapSized,
-          currentState: MapState.ImpassablesMarked,
+          ...mapWithImpassables,
+          currentState: MapState.WithImpassables,
           impassables: new Set([3]),
         };
         const expectedNextState: MapWithImpassables = {
-          ...mapSized,
-          currentState: MapState.ImpassablesMarked,
+          ...mapWithImpassables,
+          currentState: MapState.WithImpassables,
           impassables: new Set([3, action.squareIdx]),
         };
 
@@ -173,13 +164,13 @@ describe("pokemonMapReducer", () => {
 
       it("removes the square as an impassible when the squareIdx is already an impassible", () => {
         const currentState: MapWithImpassables = {
-          ...mapSized,
-          currentState: MapState.ImpassablesMarked,
+          ...mapWithImpassables,
+          currentState: MapState.WithImpassables,
           impassables: new Set([action.squareIdx]),
         };
         const expectedNextState: MapWithImpassables = {
-          ...mapSized,
-          currentState: MapState.ImpassablesMarked,
+          ...mapWithImpassables,
+          currentState: MapState.WithImpassables,
           impassables: new Set(),
         };
 
@@ -195,12 +186,12 @@ describe("pokemonMapReducer", () => {
         };
         const currentState: MapWithImpassables = {
           size: 2,
-          currentState: MapState.ImpassablesMarked,
+          currentState: MapState.WithImpassables,
           impassables: new Set([0, action.squareIdx]),
         };
         const expectedNextState: MapWithImpassables = {
           size: 2,
-          currentState: MapState.ImpassablesMarked,
+          currentState: MapState.WithImpassables,
           impassables: new Set([0]),
         };
 

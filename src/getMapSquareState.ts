@@ -7,9 +7,8 @@ const getMapSquareState = (
 ): MapSquareState => {
   switch (map.currentState) {
     case MapState.NotSized:
-    case MapState.Sized:
       return MapSquareState.Open;
-    case MapState.ImpassablesMarked:
+    case MapState.WithImpassables:
       return map.impassables.has(squareIdx)
         ? MapSquareState.Impassible
         : MapSquareState.Open;

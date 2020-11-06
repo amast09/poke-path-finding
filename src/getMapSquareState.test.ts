@@ -2,7 +2,6 @@ import {
   MapState,
   MapWithImpassables,
   MapWithStartAndImpassables,
-  MapSized,
   MapNotSized,
   MapComplete,
   MapWithPathHome,
@@ -18,14 +17,9 @@ const mapNotSized: MapNotSized = {
   currentState: MapState.NotSized,
 };
 
-const mapSized: MapSized = {
-  currentState: MapState.Sized,
-  size: 4,
-};
-
 const mapWithImpassables: MapWithImpassables = {
-  ...mapSized,
-  currentState: MapState.ImpassablesMarked,
+  size: 4,
+  currentState: MapState.WithImpassables,
   impassables: new Set([1, 2]),
 };
 
@@ -53,16 +47,6 @@ describe("getMapSquareState", () => {
       expect(
         ALL_MAP_INDEXES.every(
           (idx) => getMapSquareState(mapNotSized, idx) === MapSquareState.Open
-        )
-      ).toEqual(true);
-    });
-  });
-
-  describe("when the map is sized", () => {
-    it("returns 'Open' for all squares", () => {
-      expect(
-        ALL_MAP_INDEXES.every(
-          (idx) => getMapSquareState(mapSized, idx) === MapSquareState.Open
         )
       ).toEqual(true);
     });

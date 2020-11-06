@@ -39,7 +39,8 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
         action.size <= 10
       ) {
         return {
-          currentState: MapState.Sized,
+          currentState: MapState.WithImpassables,
+          impassables: new Set(),
           size: action.size,
         };
       } else {
@@ -47,21 +48,12 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
       }
     case ActionType.ImpassableToggled:
       if (
-        state.currentState === MapState.Sized &&
+        state.currentState === MapState.WithImpassables &&
         isSquareInMap(state.size, action.squareIdx)
       ) {
         return {
           ...state,
-          currentState: MapState.ImpassablesMarked,
-          impassables: new Set([action.squareIdx]),
-        };
-      } else if (
-        state.currentState === MapState.ImpassablesMarked &&
-        isSquareInMap(state.size, action.squareIdx)
-      ) {
-        return {
-          ...state,
-          currentState: MapState.ImpassablesMarked,
+          currentState: MapState.WithImpassables,
           impassables: hasSquaresAvailable(state.size, state.impassables)
             ? xorValueIntoSet(state.impassables, action.squareIdx)
             : immutablyRemoveValueFromSet(state.impassables, action.squareIdx),

@@ -40,8 +40,7 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
   switch (state.currentState) {
     case MapState.NotSized:
       return <MapSizeSelection onSizeSet={onSizeSelect} />;
-    case MapState.Sized:
-    case MapState.ImpassablesMarked:
+    case MapState.WithImpassables:
       return (
         <div
           style={{

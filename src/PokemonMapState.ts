@@ -1,7 +1,6 @@
 export enum MapState {
   NotSized = "NotSized",
-  Sized = "Sized",
-  ImpassablesMarked = "ImpassablesMarked",
+  WithImpassables = "WithImpassables",
   ImpassablesAndStartMarked = "ImpassablesAndStartMarked",
   Complete = "Complete",
   WithPathHome = "WithPathHome",
@@ -15,13 +14,8 @@ export interface MapNotSized {
   readonly currentState: MapState.NotSized;
 }
 
-export interface MapSized {
-  readonly currentState: MapState.Sized;
-  readonly size: number;
-}
-
 export interface MapWithImpassables {
-  readonly currentState: MapState.ImpassablesMarked;
+  readonly currentState: MapState.WithImpassables;
   readonly size: number;
   readonly impassables: Set<number>;
 }
@@ -52,7 +46,6 @@ export interface MapWithPathHome {
 
 type PokemonMapState =
   | MapNotSized
-  | MapSized
   | MapWithImpassables
   | MapWithStartAndImpassables
   | MapComplete
