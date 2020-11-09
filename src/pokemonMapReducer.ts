@@ -32,7 +32,7 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
   action: PokemonMapAction
 ): PokemonMapState => {
   switch (action.type) {
-    case ActionType.MapSizeSet:
+    case ActionType.SizeSet:
       if (
         state.currentState === MapState.NotSized &&
         action.size >= 2 &&
@@ -61,8 +61,21 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
       } else {
         return state;
       }
-    case ActionType.EndCoordinatePicked:
-    case ActionType.StartCoordinatePicked:
+    case ActionType.StartPicked:
+      if (
+        (state.currentState === MapState.WithImpassables ||
+          state.currentState === MapState.ImpassablesAndStartMarked) &&
+        isSquareInMap(state.size, action.squareIdx)
+      ) {
+        return {
+          ...state,
+          currentState: MapState.ImpassablesAndStartMarked,
+          start: action.squareIdx,
+        };
+      } else {
+        return state;
+      }
+    case ActionType.EndPicked:
     case ActionType.PathHomeCalculated:
       return state;
   }

@@ -1,7 +1,8 @@
 import {
   ActionType,
   ImpassableToggledAction,
-  MapSizeSetAction,
+  SizeSetAction,
+  StartPickedAction,
 } from "./PokemonMapAction";
 import {
   MapComplete,
@@ -42,16 +43,16 @@ const mapWithPathHome: MapWithPathHome = {
 };
 
 describe("pokemonMapReducer", () => {
-  describe("MapSizeSet Action", () => {
-    const action: MapSizeSetAction = {
-      type: ActionType.MapSizeSet,
+  describe("SizeSet Action", () => {
+    const action: SizeSetAction = {
+      type: ActionType.SizeSet,
       size: 4,
     };
 
     describe("when map is 'NotSized'", () => {
       it("noops when the size is less than 2", () => {
-        const size1Action: MapSizeSetAction = {
-          type: ActionType.MapSizeSet,
+        const size1Action: SizeSetAction = {
+          type: ActionType.SizeSet,
           size: 1,
         };
         expect(pokemonMapReducer(mapNotSized, size1Action)).toEqual(
@@ -60,8 +61,8 @@ describe("pokemonMapReducer", () => {
       });
 
       it("noops when the size is greater than 10", () => {
-        const size11Action: MapSizeSetAction = {
-          type: ActionType.MapSizeSet,
+        const size11Action: SizeSetAction = {
+          type: ActionType.SizeSet,
           size: 11,
         };
         expect(pokemonMapReducer(mapNotSized, size11Action)).toEqual(
@@ -70,8 +71,8 @@ describe("pokemonMapReducer", () => {
       });
 
       it("updates the map to be a sized map with no impassibles with a size between 3-10", () => {
-        const size5Action: MapSizeSetAction = {
-          type: ActionType.MapSizeSet,
+        const size5Action: SizeSetAction = {
+          type: ActionType.SizeSet,
           size: 5,
         };
         const expectedState: MapWithImpassables = {
@@ -205,6 +206,79 @@ describe("pokemonMapReducer", () => {
       expect(pokemonMapReducer(mapWithStartAndImpassables, action)).toEqual(
         mapWithStartAndImpassables
       );
+    });
+
+    it("noops when the map is 'Complete'", () => {
+      expect(pokemonMapReducer(mapComplete, action)).toEqual(mapComplete);
+    });
+
+    it("noops when the map is 'WithPathHome'", () => {
+      expect(pokemonMapReducer(mapWithPathHome, action)).toEqual(
+        mapWithPathHome
+      );
+    });
+  });
+
+  describe("StartPicked Action", () => {
+    const action: StartPickedAction = {
+      type: ActionType.StartPicked,
+      squareIdx: 3,
+    };
+
+    it("noops when the map is 'NotSized'", () => {
+      expect(pokemonMapReducer(mapNotSized, action)).toEqual(mapNotSized);
+    });
+
+    describe("when the map is 'ImpassablesMarked'", () => {
+      it("noops for an invalid square index", () => {
+        const actionWithInvalidSquareIndex: StartPickedAction = {
+          type: ActionType.StartPicked,
+          squareIdx: 1000,
+        };
+
+        expect(
+          pokemonMapReducer(mapWithImpassables, actionWithInvalidSquareIndex)
+        ).toEqual(mapWithImpassables);
+      });
+
+      it("sets the start state when the square index is in the map", () => {
+        const expectedNextState: MapWithStartAndImpassables = {
+          ...mapWithImpassables,
+          currentState: MapState.ImpassablesAndStartMarked,
+          start: action.squareIdx,
+        };
+
+        expect(pokemonMapReducer(mapWithImpassables, action)).toEqual(
+          expectedNextState
+        );
+      });
+    });
+
+    describe("when the map is 'ImpassablesAndStartMarked'", () => {
+      it("noops for an invalid square index", () => {
+        const actionWithInvalidSquareIndex: StartPickedAction = {
+          type: ActionType.StartPicked,
+          squareIdx: -1,
+        };
+
+        expect(
+          pokemonMapReducer(
+            mapWithStartAndImpassables,
+            actionWithInvalidSquareIndex
+          )
+        ).toEqual(mapWithStartAndImpassables);
+      });
+
+      it("overrides the start state when the square index is in the map", () => {
+        const expectedNextState: MapWithStartAndImpassables = {
+          ...mapWithStartAndImpassables,
+          start: action.squareIdx,
+        };
+
+        expect(pokemonMapReducer(mapWithStartAndImpassables, action)).toEqual(
+          expectedNextState
+        );
+      });
     });
 
     it("noops when the map is 'Complete'", () => {

@@ -1,15 +1,15 @@
 import { NoPathHome } from "./PokemonMapState";
 
 export enum ActionType {
-  MapSizeSet = "MapSizeSet",
+  SizeSet = "SizeSet",
   ImpassableToggled = "ImpassableToggled",
-  StartCoordinatePicked = "StartCoordinatePicked",
-  EndCoordinatePicked = "EndCoordinatePicked",
+  StartPicked = "StartPicked",
+  EndPicked = "EndPicked",
   PathHomeCalculated = "PathHomeCalculated",
 }
 
-export interface MapSizeSetAction {
-  readonly type: ActionType.MapSizeSet;
+export interface SizeSetAction {
+  readonly type: ActionType.SizeSet;
   readonly size: number;
 }
 
@@ -18,13 +18,13 @@ export interface ImpassableToggledAction {
   readonly squareIdx: number;
 }
 
-interface StartCoordinatePicked {
-  readonly type: ActionType.StartCoordinatePicked;
+export interface StartPickedAction {
+  readonly type: ActionType.StartPicked;
   readonly squareIdx: number;
 }
 
-interface EndCoordinatePicked {
-  readonly type: ActionType.EndCoordinatePicked;
+export interface EndPickedAction {
+  readonly type: ActionType.EndPicked;
   readonly squareIdx: number;
 }
 
@@ -34,10 +34,10 @@ interface PathHomeCalculated {
 }
 
 type PokemonMapAction =
-  | MapSizeSetAction
+  | SizeSetAction
   | ImpassableToggledAction
-  | StartCoordinatePicked
-  | EndCoordinatePicked
+  | StartPickedAction
+  | EndPickedAction
   | PathHomeCalculated;
 
 export default PokemonMapAction;
