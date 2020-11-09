@@ -76,6 +76,19 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
         return state;
       }
     case ActionType.EndPicked:
+      if (
+        (state.currentState === MapState.ImpassablesAndStartMarked ||
+          state.currentState === MapState.Complete) &&
+        isSquareInMap(state.size, action.squareIdx)
+      ) {
+        return {
+          ...state,
+          currentState: MapState.Complete,
+          end: action.squareIdx,
+        };
+      } else {
+        return state;
+      }
     case ActionType.PathHomeCalculated:
       return state;
   }

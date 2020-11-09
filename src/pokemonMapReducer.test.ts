@@ -1,5 +1,6 @@
 import {
   ActionType,
+  EndPickedAction,
   ImpassableToggledAction,
   SizeSetAction,
   StartPickedAction,
@@ -283,6 +284,81 @@ describe("pokemonMapReducer", () => {
 
     it("noops when the map is 'Complete'", () => {
       expect(pokemonMapReducer(mapComplete, action)).toEqual(mapComplete);
+    });
+
+    it("noops when the map is 'WithPathHome'", () => {
+      expect(pokemonMapReducer(mapWithPathHome, action)).toEqual(
+        mapWithPathHome
+      );
+    });
+  });
+
+  describe("EndPicked Action", () => {
+    const action: EndPickedAction = {
+      type: ActionType.EndPicked,
+      squareIdx: 3,
+    };
+
+    it("noops when the map is 'NotSized'", () => {
+      expect(pokemonMapReducer(mapNotSized, action)).toEqual(mapNotSized);
+    });
+
+    it("noops when the map is 'ImpassablesMarked'", () => {
+      expect(pokemonMapReducer(mapWithImpassables, action)).toEqual(
+        mapWithImpassables
+      );
+    });
+
+    describe("when the map is 'ImpassablesAndStartMarked'", () => {
+      it("noops for an invalid square index", () => {
+        const actionWithInvalidSquareIndex: EndPickedAction = {
+          type: ActionType.EndPicked,
+          squareIdx: -1,
+        };
+
+        expect(
+          pokemonMapReducer(
+            mapWithStartAndImpassables,
+            actionWithInvalidSquareIndex
+          )
+        ).toEqual(mapWithStartAndImpassables);
+      });
+
+      it("sets the end state when the square index is in the map", () => {
+        const expectedNextState: MapComplete = {
+          ...mapWithStartAndImpassables,
+          currentState: MapState.Complete,
+          end: action.squareIdx,
+        };
+
+        expect(pokemonMapReducer(mapWithStartAndImpassables, action)).toEqual(
+          expectedNextState
+        );
+      });
+    });
+
+    describe("noops when the map is 'Complete'", () => {
+      it("noops for an invalid square index", () => {
+        const actionWithInvalidSquareIndex: EndPickedAction = {
+          type: ActionType.EndPicked,
+          squareIdx: -1,
+        };
+
+        expect(
+          pokemonMapReducer(mapComplete, actionWithInvalidSquareIndex)
+        ).toEqual(mapComplete);
+      });
+
+      it("sets the end state when the square index is in the map", () => {
+        const expectedNextState: MapComplete = {
+          ...mapComplete,
+          end: action.squareIdx,
+        };
+
+        expect(pokemonMapReducer(mapComplete, action)).toEqual(
+          expectedNextState
+        );
+      });
     });
 
     it("noops when the map is 'WithPathHome'", () => {
