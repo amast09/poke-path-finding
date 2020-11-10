@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MapComplete } from "../PokemonMapState";
+import { MapComplete } from "../types/PokemonMapState";
 import Move from "../types/Move";
 import NoPathHome, { NO_PATH_HOME } from "../types/NoPathHome";
 import getMapCoordinatesForSquareIndex from "../selectors/getMapCoordinatesForSquareIndex";

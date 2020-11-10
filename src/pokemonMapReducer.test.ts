@@ -5,7 +5,7 @@ import {
   PathHomeCalculated,
   SizeSetAction,
   StartPickedAction,
-} from "./PokemonMapAction";
+} from "./types/PokemonMapAction";
 import {
   MapComplete,
   MapNotSized,
@@ -13,7 +13,7 @@ import {
   MapWithImpassables,
   MapWithPathHome,
   MapWithStartAndImpassables,
-} from "./PokemonMapState";
+} from "./types/PokemonMapState";
 import pokemonMapReducer from "./pokemonMapReducer";
 import Move from "./types/Move";
 import { NO_PATH_HOME } from "./types/NoPathHome";

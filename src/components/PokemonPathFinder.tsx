@@ -1,6 +1,8 @@
 import React, { Reducer, useReducer, useState } from "react";
-import PokemonMap from "./PokemonMap";
-import PokemonMapState, { MapNotSized, MapState } from "../PokemonMapState";
+import PokemonMapState, {
+  MapNotSized,
+  MapState,
+} from "../types/PokemonMapState";
 import PokemonMapAction, {
   ActionType,
   EndPickedAction,
@@ -8,12 +10,13 @@ import PokemonMapAction, {
   PathHomeCalculated,
   SizeSetAction,
   StartPickedAction,
-} from "../PokemonMapAction";
+} from "../types/PokemonMapAction";
 import pokemonMapReducer from "../pokemonMapReducer";
 import getPathHome from "../api/getPathHome";
-import getMapSquareState from "../selectors/getMapSquareState";
 import MapSizeSelect, { SIZE_SELECT_INPUT_NAME } from "./MapSizeSelect";
 import PathFinderActionButton from "./PathFinderActionButton";
+import MapSquare from "./MapSquare";
+import getMapSquareState from "../selectors/getMapSquareState";
 
 export enum PathFinderState {
   UserPickingMapSize = "UserPickingMapSize",
@@ -113,11 +116,20 @@ const PokemonPathFinder: React.FC = () => {
       <PathFinderActionButton pathFinderState={pathFinderState} />
       {state.currentState !== MapState.NotSized &&
         pathFinderState !== PathFinderState.UserPickingMapSize && (
-          <PokemonMap
-            getMapSquareState={getMapSquareState(state)}
-            mapSize={state.size}
-            onSquareToggle={onSquareToggle}
-          />
+          <div
+            style={{
+              display: "grid",
+              gridTemplate: `repeat(${state.size}, auto) / repeat(${state.size}, auto)`,
+            }}
+          >
+            {Array.from({ length: state.size * state.size }, (_, idx) => (
+              <MapSquare
+                key={idx}
+                onClick={() => onSquareToggle(idx)}
+                mapSquareState={getMapSquareState(state, idx)}
+              />
+            ))}
+          </div>
         )}
     </form>
   );

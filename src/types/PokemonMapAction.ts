@@ -1,5 +1,5 @@
-import Move from "./types/Move";
-import NoPathHome from "./types/NoPathHome";
+import Move from "./Move";
+import NoPathHome from "./NoPathHome";
 
 export enum ActionType {
   SizeSet = "SizeSet",

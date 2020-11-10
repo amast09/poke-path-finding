@@ -3,7 +3,7 @@
  */
 import axios from "axios";
 import nock from "nock";
-import { MapComplete, MapState } from "../PokemonMapState";
+import { MapComplete, MapState } from "../types/PokemonMapState";
 import getPathHome, { GetPathHome200ApiResponse } from "./getPathHome";
 import { NO_PATH_HOME } from "../types/NoPathHome";
 import Move from "../types/Move";
