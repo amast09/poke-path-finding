@@ -24,7 +24,7 @@ nvm use
 npm install
 ```
 
-## To develop locally against the app
+## To run the app locally
 
 ```
 npm run dev
