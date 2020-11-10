@@ -1,6 +1,6 @@
 import React, { Reducer, useReducer, useState } from "react";
-import PokemonMapState, { MapNotSized, MapState } from "./PokemonMapState";
-import pokemonMapReducer from "./pokemonMapReducer";
+import PokemonMap from "./PokemonMap";
+import PokemonMapState, { MapNotSized, MapState } from "../PokemonMapState";
 import PokemonMapAction, {
   ActionType,
   EndPickedAction,
@@ -8,24 +8,14 @@ import PokemonMapAction, {
   PathHomeCalculated,
   SizeSetAction,
   StartPickedAction,
-} from "./PokemonMapAction";
-import MapSquare from "./MapSquare";
-import getMapSquareState from "./getMapSquareState";
-import getPathHome from "./getPathHome";
+} from "../PokemonMapAction";
+import pokemonMapReducer from "../pokemonMapReducer";
+import getPathHome from "../getPathHome";
+import getMapSquareState from "../getMapSquareState";
+import MapSizeSelect, { SIZE_SELECT_INPUT_NAME } from "./MapSizeSelect";
+import PathFinderActionButton from "./PathFinderActionButton";
 
-const SIZE_SELECT_INPUT_NAME = "sizeSelect";
-const MIN_MAP_SIZE = 2;
-const MAX_MAP_SIZE = 10;
-const VALID_SIZES = Array.from(
-  { length: MAX_MAP_SIZE + 1 - MIN_MAP_SIZE },
-  (_, idx) => idx + MIN_MAP_SIZE
-);
-
-const initialState: MapNotSized = {
-  currentState: MapState.NotSized,
-};
-
-enum PathFinderState {
+export enum PathFinderState {
   UserPickingMapSize = "UserPickingMapSize",
   UserMarkingImpassables = "UserMarkingImpassables",
   UserMarkingStart = "UserMarkingStart",
@@ -36,43 +26,11 @@ enum PathFinderState {
   LoadingPathHomeFailed = "LoadingPathHomeFailed",
 }
 
-const MapSizeSelect: React.FC = () => (
-  <>
-    <label htmlFor="size-select">Pick a Map Size</label>
-    <select id="size-select" name={SIZE_SELECT_INPUT_NAME}>
-      {VALID_SIZES.map((size) => (
-        <option key={size} value={size}>
-          {size}
-        </option>
-      ))}
-    </select>
-  </>
-);
-
-const PathFinderActionButton: React.FC<Readonly<{
-  pathFinderState: PathFinderState;
-}>> = ({ pathFinderState }) => {
-  switch (pathFinderState) {
-    case PathFinderState.UserPickingMapSize:
-      return <button type="submit">Set Map Size</button>;
-    case PathFinderState.UserMarkingImpassables:
-      return <button type="submit">Done Marking Impassables</button>;
-    case PathFinderState.UserMarkingStart:
-      return <button type="submit">Done Marking Start</button>;
-    case PathFinderState.UserMarkingEnd:
-      return <button type="submit">Done Marking End</button>;
-    case PathFinderState.DoneCreatingMap:
-      return <button type="submit">Find Poke Path!</button>;
-    case PathFinderState.LoadingPathHome:
-      return <button disabled={true}>Loading...</button>;
-    case PathFinderState.LoadingPathHomeComplete:
-      return <button type="submit">Reset</button>;
-    case PathFinderState.LoadingPathHomeFailed:
-      return <button type="submit">Path Failed, try again?</button>;
-  }
+const initialState: MapNotSized = {
+  currentState: MapState.NotSized,
 };
 
-const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
+const PokemonPathFinder: React.FC = () => {
   const [pathFinderState, setPathFinderState] = useState<PathFinderState>(
     PathFinderState.UserPickingMapSize
   );
@@ -80,7 +38,7 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
     Reducer<PokemonMapState, PokemonMapAction>
   >(pokemonMapReducer, initialState);
 
-  const onSquareToggle = (squareIdx: number) => (): void => {
+  const onSquareToggle = (squareIdx: number): void => {
     if (pathFinderState === PathFinderState.UserMarkingImpassables) {
       const impassableToggledAction: ImpassableToggledAction = {
         type: ActionType.ImpassableToggled,
@@ -152,28 +110,17 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
       {pathFinderState === PathFinderState.UserPickingMapSize && (
         <MapSizeSelect />
       )}
+      <PathFinderActionButton pathFinderState={pathFinderState} />
       {state.currentState !== MapState.NotSized &&
         pathFinderState !== PathFinderState.UserPickingMapSize && (
-          <div
-            style={{
-              display: "grid",
-              gridTemplate: `repeat(${state.size}, auto) / repeat(${state.size}, auto)`,
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            {Array.from({ length: state.size * state.size }, (_, idx) => (
-              <MapSquare
-                key={idx}
-                onClick={onSquareToggle(idx)}
-                mapSquareState={getMapSquareState(state, idx)}
-              />
-            ))}
-          </div>
+          <PokemonMap
+            getMapSquareState={getMapSquareState(state)}
+            mapSize={state.size}
+            onSquareToggle={onSquareToggle}
+          />
         )}
-      <PathFinderActionButton pathFinderState={pathFinderState} />
     </form>
   );
 };
 
-export default PokemonMap;
+export default PokemonPathFinder;

@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import PokemonPathFinder from "./components/PokemonPathFinder";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <PokemonPathFinder />
   </React.StrictMode>,
   document.getElementById("root")
 );

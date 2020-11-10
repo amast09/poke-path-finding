@@ -1,9 +1,8 @@
 import PokemonMapState, { MapState } from "./PokemonMapState";
-import { MapSquareState } from "./MapSquare";
+import { MapSquareState } from "./components/MapSquare";
 import { NO_PATH_HOME } from "./NoPathHome";
 
-const getMapSquareState = (
-  map: PokemonMapState,
+const getMapSquareState = (map: PokemonMapState) => (
   squareIdx: number
 ): MapSquareState => {
   switch (map.currentState) {

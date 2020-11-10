@@ -1,8 +1,8 @@
 import React from "react";
-import grassTilePath from "./images/grasstile.png";
-import rockTilePath from "./images/rocktile.png";
-import bulbasaurPath from "./images/bulbasaur.png";
-import finishTilePath from "./images/finishtile.png";
+import grassTilePath from "../images/grasstile.png";
+import rockTilePath from "../images/rocktile.png";
+import bulbasaurPath from "../images/bulbasaur.png";
+import finishTilePath from "../images/finishtile.png";
 import "./MapSquareStyles.css";
 
 export enum MapSquareState {
@@ -27,10 +27,10 @@ const MAP_SQUARE_IMAGES: Readonly<Record<MapSquareState, JSX.Element>> = {
   ),
 };
 
-const MapSquare: React.FC<{
+const MapSquare: React.FC<Readonly<{
   onClick?: () => void;
   mapSquareState: MapSquareState;
-}> = ({ onClick, mapSquareState }) => (
+}>> = ({ onClick, mapSquareState }) => (
   <div
     data-testid="map-square"
     className={`map-square map-square--${mapSquareState}`}
