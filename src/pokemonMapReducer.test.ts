@@ -2,6 +2,7 @@ import {
   ActionType,
   EndPickedAction,
   ImpassableToggledAction,
+  PathHomeCalculated,
   SizeSetAction,
   StartPickedAction,
 } from "./PokemonMapAction";
@@ -12,8 +13,10 @@ import {
   MapWithImpassables,
   MapWithPathHome,
   MapWithStartAndImpassables,
+  NO_PATH_HOME,
 } from "./PokemonMapState";
 import pokemonMapReducer from "./pokemonMapReducer";
+import Move from "./Move";
 
 const mapNotSized: MapNotSized = {
   currentState: MapState.NotSized,
@@ -28,7 +31,7 @@ const mapWithImpassables: MapWithImpassables = {
 const mapWithStartAndImpassables: MapWithStartAndImpassables = {
   ...mapWithImpassables,
   currentState: MapState.ImpassablesAndStartMarked,
-  start: 1,
+  start: 0,
 };
 
 const mapComplete: MapComplete = {
@@ -358,6 +361,68 @@ describe("pokemonMapReducer", () => {
         expect(pokemonMapReducer(mapComplete, action)).toEqual(
           expectedNextState
         );
+      });
+    });
+
+    it("noops when the map is 'WithPathHome'", () => {
+      expect(pokemonMapReducer(mapWithPathHome, action)).toEqual(
+        mapWithPathHome
+      );
+    });
+  });
+
+  describe("PathHomeCalculated Action", () => {
+    const action: PathHomeCalculated = {
+      type: ActionType.PathHomeCalculated,
+      path: NO_PATH_HOME,
+    };
+
+    it("noops when the map is 'NotSized'", () => {
+      expect(pokemonMapReducer(mapNotSized, action)).toEqual(mapNotSized);
+    });
+
+    it("noops when the map is 'ImpassablesMarked'", () => {
+      expect(pokemonMapReducer(mapWithImpassables, action)).toEqual(
+        mapWithImpassables
+      );
+    });
+
+    it("noops when the map is 'ImpassablesAndStartMarked'", () => {
+      expect(pokemonMapReducer(mapWithStartAndImpassables, action)).toEqual(
+        mapWithStartAndImpassables
+      );
+    });
+
+    describe("when the map is 'Complete'", () => {
+      it("sets the pathHome when there is `NoPathHome`", () => {
+        const expectedState: MapWithPathHome = {
+          ...mapComplete,
+          currentState: MapState.WithPathHome,
+          pathHome: NO_PATH_HOME,
+        };
+
+        expect(pokemonMapReducer(mapComplete, action)).toEqual(expectedState);
+      });
+
+      it("translates the `Move`'s home into valid `pathHome` data", () => {
+        const currentState: MapComplete = {
+          currentState: MapState.Complete,
+          size: 4,
+          impassables: new Set([1, 2]),
+          start: 0,
+          end: 15,
+        };
+        const action: PathHomeCalculated = {
+          type: ActionType.PathHomeCalculated,
+          path: [Move.D, Move.D, Move.D, Move.R, Move.R],
+        };
+        const expectedState: MapWithPathHome = {
+          ...currentState,
+          currentState: MapState.WithPathHome,
+          pathHome: [4, 8, 12, 13, 14],
+        };
+
+        expect(pokemonMapReducer(currentState, action)).toEqual(expectedState);
       });
     });
 

@@ -1,4 +1,5 @@
 import { NoPathHome } from "./PokemonMapState";
+import Move from "./Move";
 
 export enum ActionType {
   SizeSet = "SizeSet",
@@ -28,9 +29,9 @@ export interface EndPickedAction {
   readonly squareIdx: number;
 }
 
-interface PathHomeCalculated {
+export interface PathHomeCalculated {
   readonly type: ActionType.PathHomeCalculated;
-  readonly path: number[] | NoPathHome;
+  readonly path: Move[] | NoPathHome;
 }
 
 type PokemonMapAction =
