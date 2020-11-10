@@ -10,8 +10,8 @@ import PokemonMapAction, {
   StartPickedAction,
 } from "../PokemonMapAction";
 import pokemonMapReducer from "../pokemonMapReducer";
-import getPathHome from "../getPathHome";
-import getMapSquareState from "../getMapSquareState";
+import getPathHome from "../api/getPathHome";
+import getMapSquareState from "../selectors/getMapSquareState";
 import MapSizeSelect, { SIZE_SELECT_INPUT_NAME } from "./MapSizeSelect";
 import PathFinderActionButton from "./PathFinderActionButton";
 

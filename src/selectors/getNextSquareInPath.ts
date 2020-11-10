@@ -1,4 +1,4 @@
-import Move from "./Move";
+import Move from "../types/Move";
 
 const getNextSquareInPath = (
   params: Readonly<{

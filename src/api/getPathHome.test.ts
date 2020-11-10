@@ -3,10 +3,10 @@
  */
 import axios from "axios";
 import nock from "nock";
-import { MapComplete, MapState } from "./PokemonMapState";
+import { MapComplete, MapState } from "../PokemonMapState";
 import getPathHome, { GetPathHome200ApiResponse } from "./getPathHome";
-import { NO_PATH_HOME } from "./NoPathHome";
-import Move from "./Move";
+import { NO_PATH_HOME } from "../types/NoPathHome";
+import Move from "../types/Move";
 
 const CITRINE_INFORMATICS_API_BASE_URL =
   "https://frozen-reef-96768.herokuapp.com";

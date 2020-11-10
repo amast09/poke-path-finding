@@ -1,4 +1,4 @@
-import NoPathHome from "./NoPathHome";
+import NoPathHome from "./types/NoPathHome";
 
 export enum MapState {
   NotSized = "NotSized",

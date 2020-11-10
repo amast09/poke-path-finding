@@ -15,8 +15,8 @@ import {
   MapWithStartAndImpassables,
 } from "./PokemonMapState";
 import pokemonMapReducer from "./pokemonMapReducer";
-import Move from "./Move";
-import { NO_PATH_HOME } from "./NoPathHome";
+import Move from "./types/Move";
+import { NO_PATH_HOME } from "./types/NoPathHome";
 
 const mapNotSized: MapNotSized = {
   currentState: MapState.NotSized,

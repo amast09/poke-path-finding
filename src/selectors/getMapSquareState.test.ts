@@ -5,9 +5,9 @@ import {
   MapNotSized,
   MapComplete,
   MapWithPathHome,
-} from "./PokemonMapState";
+} from "../PokemonMapState";
 import getMapSquareState from "./getMapSquareState";
-import { MapSquareState } from "./components/MapSquare";
+import { MapSquareState } from "../components/MapSquare";
 
 const size = 4;
 const ALL_MAP_INDEXES = Array.from({ length: size }).map((_, idx) => idx);

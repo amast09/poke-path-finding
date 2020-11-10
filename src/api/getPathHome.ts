@@ -1,8 +1,8 @@
 import axios from "axios";
-import { MapComplete } from "./PokemonMapState";
-import Move from "./Move";
-import NoPathHome, { NO_PATH_HOME } from "./NoPathHome";
-import getMapCoordinatesForSquareIndex from "./getMapCoordinatesForSquareIndex";
+import { MapComplete } from "../PokemonMapState";
+import Move from "../types/Move";
+import NoPathHome, { NO_PATH_HOME } from "../types/NoPathHome";
+import getMapCoordinatesForSquareIndex from "../selectors/getMapCoordinatesForSquareIndex";
 
 const CITRINE_INFORMATICS_API_BASE_URL =
   "https://frozen-reef-96768.herokuapp.com";

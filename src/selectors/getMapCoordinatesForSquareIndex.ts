@@ -1,4 +1,4 @@
-import { MapCoordinate } from "./getPathHome";
+import { MapCoordinate } from "../api/getPathHome";
 
 const getMapCoordinatesForSquareIndex = (squareSize: number) => (
   squareIdx: number
