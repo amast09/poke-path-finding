@@ -3,6 +3,7 @@ import {
   EndPickedAction,
   ImpassableToggledAction,
   PathHomeCalculated,
+  Reset,
   SizeSetAction,
   StartPickedAction,
 } from "../types/PokemonMapAction";
@@ -430,6 +431,28 @@ describe("pokemonMapReducer", () => {
       expect(pokemonMapReducer(mapWithPathHome, action)).toEqual(
         mapWithPathHome
       );
+    });
+  });
+
+  describe("Reset Action", () => {
+    const action: Reset = {
+      type: ActionType.Reset,
+    };
+
+    it("resets the state to `NotSized`", () => {
+      expect(
+        [
+          mapNotSized,
+          mapWithImpassables,
+          mapWithStartAndImpassables,
+          mapComplete,
+          mapWithPathHome,
+        ].every(
+          (state) =>
+            pokemonMapReducer(state, action).currentState ===
+            mapNotSized.currentState
+        )
+      ).toEqual(true);
     });
   });
 });

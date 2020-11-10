@@ -7,6 +7,7 @@ export enum ActionType {
   StartPicked = "StartPicked",
   EndPicked = "EndPicked",
   PathHomeCalculated = "PathHomeCalculated",
+  Reset = "Reset",
 }
 
 export interface SizeSetAction {
@@ -34,11 +35,16 @@ export interface PathHomeCalculated {
   readonly moves: Move[] | NoPathHome;
 }
 
+export interface Reset {
+  readonly type: ActionType.Reset;
+}
+
 type PokemonMapAction =
   | SizeSetAction
   | ImpassableToggledAction
   | StartPickedAction
   | EndPickedAction
-  | PathHomeCalculated;
+  | PathHomeCalculated
+  | Reset;
 
 export default PokemonMapAction;

@@ -119,6 +119,8 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
       } else {
         return state;
       }
+    case ActionType.Reset:
+      return { currentState: MapState.NotSized };
   }
 };
 

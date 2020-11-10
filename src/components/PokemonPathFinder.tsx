@@ -8,6 +8,7 @@ import PokemonMapAction, {
   EndPickedAction,
   ImpassableToggledAction,
   PathHomeCalculated,
+  Reset,
   SizeSetAction,
   StartPickedAction,
 } from "../types/PokemonMapAction";
@@ -106,6 +107,13 @@ const PokemonPathFinder: React.FC = () => {
         .catch(() => {
           setPathFinderState(PathFinderState.LoadingPathHomeFailed);
         });
+    } else if (pathFinderState === PathFinderState.LoadingPathHomeComplete) {
+      const resetAction: Reset = {
+        type: ActionType.Reset,
+      };
+
+      dispatch(resetAction);
+      setPathFinderState(PathFinderState.UserPickingMapSize);
     }
   };
 
