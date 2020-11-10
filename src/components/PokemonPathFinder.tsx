@@ -17,6 +17,7 @@ import MapSizeSelect, { SIZE_SELECT_INPUT_NAME } from "./MapSizeSelect";
 import PathFinderActionButton from "./PathFinderActionButton";
 import MapSquare from "./MapSquare";
 import getMapSquareState from "../selectors/getMapSquareState";
+import "./PokemonPathFinderStyles.css";
 
 export enum PathFinderState {
   UserPickingMapSize = "UserPickingMapSize",
@@ -109,17 +110,20 @@ const PokemonPathFinder: React.FC = () => {
   };
 
   return (
-    <form onSubmit={onSubmit} style={{ width: "100%", height: "100%" }}>
+    <form onSubmit={onSubmit}>
       {pathFinderState === PathFinderState.UserPickingMapSize && (
         <MapSizeSelect />
       )}
-      <PathFinderActionButton pathFinderState={pathFinderState} />
+      <PathFinderActionButton
+        pathFinderState={pathFinderState}
+        mapState={state.currentState}
+      />
       {state.currentState !== MapState.NotSized &&
         pathFinderState !== PathFinderState.UserPickingMapSize && (
           <div
+            className="pokemon-map"
             style={{
-              display: "grid",
-              gridTemplate: `repeat(${state.size}, auto) / repeat(${state.size}, auto)`,
+              gridTemplate: `repeat(${state.size}, 64px) / repeat(${state.size}, 64px)`,
             }}
           >
             {Array.from({ length: state.size * state.size }, (_, idx) => (

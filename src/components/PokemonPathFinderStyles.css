@@ -1,0 +1,25 @@
+form {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  height: calc(100vh - 40px);
+  width: calc(100vw - 40px);
+  margin: 20px;
+}
+
+.pokemon-map {
+  min-height: 100%;
+  display: grid;
+  grid-gap: 1px;
+}
+
+button,
+select,
+label {
+  margin-bottom: 20px;
+}
+
+button {
+  cursor: pointer;
+  width: 200px;
+}
