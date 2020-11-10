@@ -15,10 +15,12 @@ import PokemonMapAction, {
 import pokemonMapReducer from "../reducers/pokemonMapReducer";
 import getPathHome from "../api/getPathHome";
 import MapSizeSelect, { SIZE_SELECT_INPUT_NAME } from "./MapSizeSelect";
-import PathFinderActionButton from "./PathFinderActionButton";
+import PokemonPathFinderActionButton from "./PokemonPathFinderActionButton";
 import MapSquare from "./MapSquare";
 import getMapSquareState from "../selectors/getMapSquareState";
 import "./PokemonPathFinderStyles.css";
+import PokemonPathFinderHelperText from "./PokemonPathFinderHelperText";
+import { NO_PATH_HOME } from "../types/NoPathHome";
 
 export enum PathFinderState {
   UserPickingMapSize = "UserPickingMapSize",
@@ -31,7 +33,7 @@ export enum PathFinderState {
   LoadingPathHomeFailed = "LoadingPathHomeFailed",
 }
 
-const initialState: MapNotSized = {
+const initialMapState: MapNotSized = {
   currentState: MapState.NotSized,
 };
 
@@ -41,7 +43,7 @@ const PokemonPathFinder: React.FC = () => {
   );
   const [state, dispatch] = useReducer<
     Reducer<PokemonMapState, PokemonMapAction>
-  >(pokemonMapReducer, initialState);
+  >(pokemonMapReducer, initialMapState);
 
   const onSquareToggle = (squareIdx: number): void => {
     if (pathFinderState === PathFinderState.UserMarkingImpassables) {
@@ -119,10 +121,17 @@ const PokemonPathFinder: React.FC = () => {
 
   return (
     <form onSubmit={onSubmit}>
+      <PokemonPathFinderHelperText
+        pathFinderState={pathFinderState}
+        pathHomeExists={
+          state.currentState === MapState.WithPathHome &&
+          state.pathHome !== NO_PATH_HOME
+        }
+      />
       {pathFinderState === PathFinderState.UserPickingMapSize && (
         <MapSizeSelect />
       )}
-      <PathFinderActionButton
+      <PokemonPathFinderActionButton
         pathFinderState={pathFinderState}
         mapState={state.currentState}
       />

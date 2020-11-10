@@ -9,16 +9,13 @@ const VALID_SIZES = Array.from(
 );
 
 const MapSizeSelect: React.FC = () => (
-  <>
-    <label htmlFor="size-select">Pick a Map Size</label>
-    <select id="size-select" name={SIZE_SELECT_INPUT_NAME}>
-      {VALID_SIZES.map((size) => (
-        <option key={size} value={size}>
-          {size}
-        </option>
-      ))}
-    </select>
-  </>
+  <select id="size-select" name={SIZE_SELECT_INPUT_NAME}>
+    {VALID_SIZES.map((size) => (
+      <option key={size} value={size}>
+        {size}
+      </option>
+    ))}
+  </select>
 );
 
 export default MapSizeSelect;

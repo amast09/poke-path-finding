@@ -2,7 +2,7 @@ import React from "react";
 import { PathFinderState } from "./PokemonPathFinder";
 import { MapState } from "../types/PokemonMapState";
 
-const PathFinderActionButton: React.FC<Readonly<{
+const PokemonPathFinderActionButton: React.FC<Readonly<{
   pathFinderState: PathFinderState;
   mapState: MapState;
 }>> = ({ pathFinderState, mapState }) => {
@@ -45,4 +45,4 @@ const PathFinderActionButton: React.FC<Readonly<{
   }
 };
 
-export default PathFinderActionButton;
+export default PokemonPathFinderActionButton;
