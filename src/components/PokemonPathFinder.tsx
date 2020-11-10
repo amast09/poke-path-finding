@@ -11,7 +11,7 @@ import PokemonMapAction, {
   SizeSetAction,
   StartPickedAction,
 } from "../types/PokemonMapAction";
-import pokemonMapReducer from "../pokemonMapReducer";
+import pokemonMapReducer from "../reducers/pokemonMapReducer";
 import getPathHome from "../api/getPathHome";
 import MapSizeSelect, { SIZE_SELECT_INPUT_NAME } from "./MapSizeSelect";
 import PathFinderActionButton from "./PathFinderActionButton";

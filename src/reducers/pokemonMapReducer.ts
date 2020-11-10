@@ -1,9 +1,9 @@
-import PokemonMapState, { MapState } from "./types/PokemonMapState";
-import PokemonMapAction, { ActionType } from "./types/PokemonMapAction";
+import PokemonMapState, { MapState } from "../types/PokemonMapState";
+import PokemonMapAction, { ActionType } from "../types/PokemonMapAction";
 import { Reducer } from "react";
-import Move from "./types/Move";
-import getNextSquareInPath from "./selectors/getNextSquareInPath";
-import { NO_PATH_HOME } from "./types/NoPathHome";
+import Move from "../types/Move";
+import getNextSquareInPath from "../selectors/getNextSquareInPath";
+import { NO_PATH_HOME } from "../types/NoPathHome";
 
 const isSquareInMap = (mapSize: number, squareIdx: number): boolean =>
   squareIdx >= 0 && squareIdx < mapSize * mapSize;
