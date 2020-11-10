@@ -128,30 +128,29 @@ const PokemonPathFinder: React.FC = () => {
           state.pathHome !== NO_PATH_HOME
         }
       />
-      {pathFinderState === PathFinderState.UserPickingMapSize && (
-        <MapSizeSelect />
-      )}
       <PokemonPathFinderActionButton
         pathFinderState={pathFinderState}
         mapState={state.currentState}
       />
-      {state.currentState !== MapState.NotSized &&
-        pathFinderState !== PathFinderState.UserPickingMapSize && (
-          <div
-            className="pokemon-map"
-            style={{
-              gridTemplate: `repeat(${state.size}, 64px) / repeat(${state.size}, 64px)`,
-            }}
-          >
-            {Array.from({ length: state.size * state.size }, (_, idx) => (
-              <MapSquare
-                key={idx}
-                onClick={() => onSquareToggle(idx)}
-                mapSquareState={getMapSquareState(state, idx)}
-              />
-            ))}
-          </div>
-        )}
+      {pathFinderState === PathFinderState.UserPickingMapSize && (
+        <MapSizeSelect />
+      )}
+      {state.currentState !== MapState.NotSized && (
+        <div
+          className="pokemon-map"
+          style={{
+            gridTemplate: `repeat(${state.size}, 64px) / repeat(${state.size}, 64px)`,
+          }}
+        >
+          {Array.from({ length: state.size * state.size }, (_, idx) => (
+            <MapSquare
+              key={idx}
+              onClick={() => onSquareToggle(idx)}
+              mapSquareState={getMapSquareState(state, idx)}
+            />
+          ))}
+        </div>
+      )}
     </form>
   );
 };
