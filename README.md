@@ -45,3 +45,11 @@ npm run build
 ```
 
 Assets produced assume the app is being hosted at `/`
+
+## Things that I could use more time on
+
+- Adding component tests for Map Size Select component
+- Adding component tests for Action Button component
+- Adding component tests for Helper Text component
+- Reworking PathFinderState in the Path Finder component into a more testable structure (currently more logic than I like)
+- Directory structure isn't perfect, might have been nicer to just have it completely flat but also, :shrug:
