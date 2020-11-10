@@ -5,11 +5,13 @@ import PokemonMapAction, {
   ActionType,
   EndPickedAction,
   ImpassableToggledAction,
+  PathHomeCalculated,
   SizeSetAction,
   StartPickedAction,
 } from "./PokemonMapAction";
 import MapSquare from "./MapSquare";
 import getMapSquareState from "./getMapSquareState";
+import getPathHome from "./getPathHome";
 
 const SIZE_SELECT_INPUT_NAME = "sizeSelect";
 const MIN_MAP_SIZE = 2;
@@ -23,12 +25,15 @@ const initialState: MapNotSized = {
   currentState: MapState.NotSized,
 };
 
-enum UserSquareSelection {
-  PickingSquareSize = "PickingSquareSize",
-  MarkingImpassables = "MarkingImpassables",
-  MarkingStart = "MarkingStart",
-  MarkingEnd = "MarkingEnd",
+enum PathFinderState {
+  UserPickingMapSize = "UserPickingMapSize",
+  UserMarkingImpassables = "UserMarkingImpassables",
+  UserMarkingStart = "UserMarkingStart",
+  UserMarkingEnd = "UserMarkingEnd",
   DoneCreatingMap = "DoneCreatingMap",
+  LoadingPathHome = "LoadingPathHome",
+  LoadingPathHomeComplete = "LoadingPathHomeComplete",
+  LoadingPathHomeFailed = "LoadingPathHomeFailed",
 }
 
 const MapSizeSelect: React.FC = () => (
@@ -44,30 +49,53 @@ const MapSizeSelect: React.FC = () => (
   </>
 );
 
+const PathFinderActionButton: React.FC<Readonly<{
+  pathFinderState: PathFinderState;
+}>> = ({ pathFinderState }) => {
+  switch (pathFinderState) {
+    case PathFinderState.UserPickingMapSize:
+      return <button type="submit">Set Map Size</button>;
+    case PathFinderState.UserMarkingImpassables:
+      return <button type="submit">Done Marking Impassables</button>;
+    case PathFinderState.UserMarkingStart:
+      return <button type="submit">Done Marking Start</button>;
+    case PathFinderState.UserMarkingEnd:
+      return <button type="submit">Done Marking End</button>;
+    case PathFinderState.DoneCreatingMap:
+      return <button type="submit">Find Poke Path!</button>;
+    case PathFinderState.LoadingPathHome:
+      return <button disabled={true}>Loading...</button>;
+    case PathFinderState.LoadingPathHomeComplete:
+      return <button type="submit">Reset</button>;
+    case PathFinderState.LoadingPathHomeFailed:
+      return <button type="submit">Path Failed, try again?</button>;
+  }
+};
+
 const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
-  const [userSquareSelection, setUserSquareSelection] = useState<
-    UserSquareSelection
-  >(UserSquareSelection.PickingSquareSize);
+  const [pathFinderState, setPathFinderState] = useState<PathFinderState>(
+    PathFinderState.UserPickingMapSize
+  );
   const [state, dispatch] = useReducer<
     Reducer<PokemonMapState, PokemonMapAction>
   >(pokemonMapReducer, initialState);
 
   const onSquareToggle = (squareIdx: number) => (): void => {
-    if (userSquareSelection === UserSquareSelection.MarkingImpassables) {
+    if (pathFinderState === PathFinderState.UserMarkingImpassables) {
       const impassableToggledAction: ImpassableToggledAction = {
         type: ActionType.ImpassableToggled,
         squareIdx,
       };
 
       dispatch(impassableToggledAction);
-    } else if (userSquareSelection === UserSquareSelection.MarkingStart) {
+    } else if (pathFinderState === PathFinderState.UserMarkingStart) {
       const startPicked: StartPickedAction = {
         type: ActionType.StartPicked,
         squareIdx,
       };
 
       dispatch(startPicked);
-    } else if (userSquareSelection === UserSquareSelection.MarkingEnd) {
+    } else if (pathFinderState === PathFinderState.UserMarkingEnd) {
       const endPicked: EndPickedAction = {
         type: ActionType.EndPicked,
         squareIdx,
@@ -80,7 +108,7 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (userSquareSelection === UserSquareSelection.PickingSquareSize) {
+    if (pathFinderState === PathFinderState.UserPickingMapSize) {
       const mapSizeSetAction: SizeSetAction = {
         type: ActionType.SizeSet,
         size: Number(
@@ -89,23 +117,43 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
       };
 
       dispatch(mapSizeSetAction);
-      setUserSquareSelection(UserSquareSelection.MarkingImpassables);
-    } else if (userSquareSelection === UserSquareSelection.MarkingImpassables) {
-      setUserSquareSelection(UserSquareSelection.MarkingStart);
-    } else if (userSquareSelection === UserSquareSelection.MarkingStart) {
-      setUserSquareSelection(UserSquareSelection.MarkingEnd);
-    } else if (userSquareSelection === UserSquareSelection.MarkingEnd) {
-      setUserSquareSelection(UserSquareSelection.DoneCreatingMap);
+      setPathFinderState(PathFinderState.UserMarkingImpassables);
+    } else if (pathFinderState === PathFinderState.UserMarkingImpassables) {
+      setPathFinderState(PathFinderState.UserMarkingStart);
+    } else if (pathFinderState === PathFinderState.UserMarkingStart) {
+      setPathFinderState(PathFinderState.UserMarkingEnd);
+    } else if (pathFinderState === PathFinderState.UserMarkingEnd) {
+      setPathFinderState(PathFinderState.DoneCreatingMap);
+    } else if (
+      (pathFinderState === PathFinderState.DoneCreatingMap ||
+        pathFinderState === PathFinderState.LoadingPathHomeFailed) &&
+      state.currentState === MapState.Complete
+    ) {
+      setPathFinderState(PathFinderState.LoadingPathHome);
+
+      getPathHome(state)
+        .then((moves) => {
+          const pathHomeCalculatedAction: PathHomeCalculated = {
+            type: ActionType.PathHomeCalculated,
+            moves,
+          };
+
+          dispatch(pathHomeCalculatedAction);
+          setPathFinderState(PathFinderState.LoadingPathHomeComplete);
+        })
+        .catch(() => {
+          setPathFinderState(PathFinderState.LoadingPathHomeFailed);
+        });
     }
   };
 
   return (
     <form onSubmit={onSubmit} style={{ width: "100%", height: "100%" }}>
-      {userSquareSelection === UserSquareSelection.PickingSquareSize && (
+      {pathFinderState === PathFinderState.UserPickingMapSize && (
         <MapSizeSelect />
       )}
       {state.currentState !== MapState.NotSized &&
-        userSquareSelection !== UserSquareSelection.PickingSquareSize && (
+        pathFinderState !== PathFinderState.UserPickingMapSize && (
           <div
             style={{
               display: "grid",
@@ -123,13 +171,7 @@ const PokemonMap: React.FC<Readonly<{ size: number }>> = () => {
             ))}
           </div>
         )}
-      {userSquareSelection !== UserSquareSelection.DoneCreatingMap && (
-        <button type="submit">Done</button>
-      )}
-      {/*TODO*/}
-      {userSquareSelection === UserSquareSelection.DoneCreatingMap && (
-        <button>Reset</button>
-      )}
+      <PathFinderActionButton pathFinderState={pathFinderState} />
     </form>
   );
 };

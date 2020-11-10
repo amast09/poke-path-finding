@@ -1,8 +1,9 @@
-import PokemonMapState, { MapState, NO_PATH_HOME } from "./PokemonMapState";
+import PokemonMapState, { MapState } from "./PokemonMapState";
 import PokemonMapAction, { ActionType } from "./PokemonMapAction";
 import { Reducer } from "react";
 import Move from "./Move";
 import getNextSquareInPath from "./getNextSquareInPath";
+import { NO_PATH_HOME } from "./NoPathHome";
 
 const isSquareInMap = (mapSize: number, squareIdx: number): boolean =>
   squareIdx >= 0 && squareIdx < mapSize * mapSize;
@@ -97,9 +98,9 @@ const pokemonMapReducer: Reducer<PokemonMapState, PokemonMapAction> = (
           ...state,
           currentState: MapState.WithPathHome,
           pathHome:
-            action.path === NO_PATH_HOME
+            action.moves === NO_PATH_HOME
               ? NO_PATH_HOME
-              : action.path.reduce(
+              : action.moves.reduce(
                   (partialPathHome: number[], nextMove: Move) => {
                     const currentSquareIdx =
                       partialPathHome[partialPathHome.length - 1] ??

@@ -1,3 +1,5 @@
+import NoPathHome from "./NoPathHome";
+
 export enum MapState {
   NotSized = "NotSized",
   WithImpassables = "WithImpassables",
@@ -5,10 +7,6 @@ export enum MapState {
   Complete = "Complete",
   WithPathHome = "WithPathHome",
 }
-
-export type NoPathHome = "NoPathHome";
-
-export const NO_PATH_HOME: NoPathHome = "NoPathHome";
 
 export interface MapNotSized {
   readonly currentState: MapState.NotSized;

@@ -1,5 +1,5 @@
-import { NoPathHome } from "./PokemonMapState";
 import Move from "./Move";
+import NoPathHome from "./NoPathHome";
 
 export enum ActionType {
   SizeSet = "SizeSet",
@@ -31,7 +31,7 @@ export interface EndPickedAction {
 
 export interface PathHomeCalculated {
   readonly type: ActionType.PathHomeCalculated;
-  readonly path: Move[] | NoPathHome;
+  readonly moves: Move[] | NoPathHome;
 }
 
 type PokemonMapAction =

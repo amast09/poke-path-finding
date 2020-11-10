@@ -13,10 +13,10 @@ import {
   MapWithImpassables,
   MapWithPathHome,
   MapWithStartAndImpassables,
-  NO_PATH_HOME,
 } from "./PokemonMapState";
 import pokemonMapReducer from "./pokemonMapReducer";
 import Move from "./Move";
+import { NO_PATH_HOME } from "./NoPathHome";
 
 const mapNotSized: MapNotSized = {
   currentState: MapState.NotSized,
@@ -374,7 +374,7 @@ describe("pokemonMapReducer", () => {
   describe("PathHomeCalculated Action", () => {
     const action: PathHomeCalculated = {
       type: ActionType.PathHomeCalculated,
-      path: NO_PATH_HOME,
+      moves: NO_PATH_HOME,
     };
 
     it("noops when the map is 'NotSized'", () => {
@@ -414,7 +414,7 @@ describe("pokemonMapReducer", () => {
         };
         const action: PathHomeCalculated = {
           type: ActionType.PathHomeCalculated,
-          path: [Move.D, Move.D, Move.D, Move.R, Move.R],
+          moves: [Move.D, Move.D, Move.D, Move.R, Move.R],
         };
         const expectedState: MapWithPathHome = {
           ...currentState,

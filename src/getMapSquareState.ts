@@ -1,5 +1,6 @@
-import PokemonMapState, { MapState, NO_PATH_HOME } from "./PokemonMapState";
+import PokemonMapState, { MapState } from "./PokemonMapState";
 import { MapSquareState } from "./MapSquare";
+import { NO_PATH_HOME } from "./NoPathHome";
 
 const getMapSquareState = (
   map: PokemonMapState,

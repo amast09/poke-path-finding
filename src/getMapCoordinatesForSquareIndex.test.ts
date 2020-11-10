@@ -1,5 +1,5 @@
-import MapCoordinate from "./MapCoordinate";
 import getMapCoordinatesForSquareIndex from "./getMapCoordinatesForSquareIndex";
+import { MapCoordinate } from "./getPathHome";
 
 describe("getMapCoordinatesForSquareIndex", () => {
   it.each`
